@@ -1,0 +1,153 @@
+<!-- The following line is essential for the "position: fixed" property to work correctly in IE -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>How to create chatbox using jQuery UI</title>
+	<!--jQuery UI CSS-->
+<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">-->
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" media="screen" />
+	<!--jQuery and jQuery UI with jQuery Chat-->
+    <script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.js"></script>
+     <script type="text/javascript" src="../js/jquery.timepicker.min.js"></script>
+       <link type="text/css" href="../css/jquery.timepicker.min.css" rel="stylesheet" />
+    <link type="text/css" href="../css/custom.css" rel="stylesheet" />       
+     <script type="text/javascript" src="../js/integrations.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+  $( function() {
+        $( "#datepickerForm" ).datepicker();
+        $( "#datepickerTo" ).datepicker();
+     
+        $('#timeformatForm').timepicker({ 'timeFormat': 'H:m:s' });
+        $('#timeformatTo').timepicker({ 'timeFormat': 'H:m:s' });
+  } );
+  </script>
+</head>
+	<body>
+		
+		
+                <div class="container-fluid ">                 
+                    <!--    HEADER  BAR-->
+                     <div class="row" style="border: 1px solid #e7e7e7;; margin-top:5px;height: 74px;">
+                         <div class="col-sm-2 main-border"    >
+                             <div class="apiImg"></div>
+                        </div>                                   
+                         <div class="col-sm-7 main-border" style="background: white;" >
+                             <div class="row" style="margin-top: 20px;">
+                                 <div class="col-sm-1"></div>
+                                 <div class="col-sm-8" style="margin-top: -4px;">
+                                     <i class="i-priority-color-mark priority-500000"></i> <input type="text" id="entityName" name=""  class="saveInputBox" placeholder="Sheduler"></input>
+                                 </div>
+<!--                                 <div class="col-sm-2">
+                                     <button  id="intentCreate" type="button" class="md-button" style="margin-top: -4px;" >Save</button>
+                                 </div>
+                                 <div  style="margin-top: 4px;" class="col-sm-1 glyphicon glyphicon-option-vertical">
+                                    
+                                 </div>-->
+                             </div>
+                             
+                         </div>                   
+                         <div class="col-sm-3 main-border" style="padding-top: 26px;" >
+                             <div class="row"> <div class="col-sm-9">Try it now</div><div class="col-sm-3 glyphicon glyphicon-grain"></div></div>
+                             
+                                                                                                 
+                       </div>
+                    </div>
+                    
+                    
+                    <!--    MENU   BAR-->
+                    <div class="row" style="height:600px; " >
+                        <div class="col-sm-2" style="height: 600px;border-right: 1px solid #e7e7e7;background: #f8f8f8;">
+                            <div class="row" style="border:1px solid #e7e7e7; height:45px;" ><div class="col-sm-8" style="text-align: center;padding-top: 9px;" >NewAgent-1</div> 
+                                <div class="col-sm-1" ><span class="caret"></span></div><div class="col-sm-1 glyphicon glyphicon-cog" style="margin-top: 12px;"  ></div></div>
+                            <div class="row" >
+                                <a href="/api-ai-service/index.html"> <div class="col-sm-1 glyphicon glyphicon-modal-window" ></div>
+                                   <div class="col-sm-6  ">Intents</div>
+                                  <div class="col-sm-4 glyphicon glyphicon-plus"></div>
+                                  </a>
+                            </div>
+                            <div  class="row" style="height: 45px; padding-top: 10px;">
+                                 <a href="./integrations.html"> <div class="col-sm-1 glyphicon glyphicon-oil" ></div>
+                                <div class="col-sm-8">Integrations</div>
+                                <div class="col-sm-3" ></div>
+                                </a>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px; background-color: #36a0e1;">
+                                 <div class="col-sm-1 glyphicon glyphicon-education" ></div>
+                                <div class="col-sm-8">Scheduler</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-piggy-bank" ></div>
+                                <div class="col-sm-8">Analytic</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-sound-dolby" ></div>
+                                <div class="col-sm-8">Fulfillment</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-sound-7-1" ></div>
+                                <div class="col-sm-8">Prebuilt Agent</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-cd" ></div>
+                                <div class="col-sm-8">Small Talk</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                        </div>
+                   
+                     
+                        <!-- BODY CONTENT-->
+                        
+                         <div class="col-sm-7" style="border-right:1px solid #f4f5f5;">
+                             <div class="row" style="margin-top: 40px;margin-bottom: 16px;"> <div class="col-sm-1" ></div> <div class="col-sm-5 fieldLabel" >Form Date</div> <div class="col-sm-6 " ><input type="text" id="datepickerForm"></div></div>
+                             <div class="row" style="margin-top: 15px;margin-bottom: 16px;"> <div class="col-sm-1" ></div> <div class="col-sm-5 fieldLabel" >To Date</div><div class="col-sm-6 " ><input type="text" id="datepickerTo"></div> </div>
+                             
+                             <div class="row" style="margin-top: 25px;margin-bottom: 16px;"> <div class="col-sm-1" ></div> <div class="col-sm-5 fieldLabel" >Form Time</div> <div class="col-sm-6 " ><input type="text" id="timeformatForm"></div></div>
+                             <div class="row" style="margin-top: 15px;margin-bottom: 16px;"> <div class="col-sm-1" ></div> <div class="col-sm-5 fieldLabel" >To Time</div><div class="col-sm-6 " ><input type="text" id="timeformatTo"></div> </div>
+                             
+                             <div class="row" style="margin-top: 20px;">
+                                 <div class="col-sm-1"></div>
+                                 <div class="col-sm-7">
+                                    
+                                 </div>
+                                 <div class="col-sm-3">
+                                     <button  id="intentCreate" type="button" class="md-button" style="margin-top: -4px;" >Trigger</button>
+                                 </div>
+                                
+                             </div>
+                             
+                             
+                            
+                              </div>
+
+                        
+                        <!--    RIGHT SIDE BAR-->
+                        <div id="chatBarId" class="col-sm-3 "  >
+                            <div class="row"> <div  class="col-sm-5" > </div><div  class="col-sm-3 glyphicon glyphicon-user" style="padding-top: 45px;" > </div></div>
+<!--                                <input type="button" name="toggle"   />				-->
+                               <div id="chat_div"></div>                                                                      
+                       </div>
+                    </div>
+                </div>               
+	</body>
+</html>
+<div id="dialog" style="width:400px;" title="Integration">
+    <div class="row" style="background:gray;"><div class="col-sm-4" id="imageId"></div>
+       <div class="col-sm-6"></div>
+       <div class="col-sm-2"><label class="switch"> <input onclick="getSwitch();" id="switchId" type="checkbox"><span class="slider round"></span></div>  
+   </div>   
+        
+   <div id="contentId">
+
+   </div>
+                                                                                              
+</div>

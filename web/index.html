@@ -1,0 +1,237 @@
+<!-- The following line is essential for the "position: fixed" property to work correctly in IE -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>How to create chatbox using jQuery UI</title>
+	<!--jQuery UI CSS-->
+<!--        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">-->
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" media="screen" />
+	<!--jQuery and jQuery UI with jQuery Chat-->
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <link type="text/css" href="css/jquery.ui.chatbox.css" rel="stylesheet" />
+    <link type="text/css" href="css/custom.css" rel="stylesheet" /> 
+    <script type="text/javascript" src="js/jquery.ui.chatbox.js"></script>
+     <script type="text/javascript" src="js/chat.js"></script>
+      <script type="text/javascript" src="js/intents.js"></script>
+      
+  <script src="js/recordmp3.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
+<!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function __log(e, data) {
+    //log.innerHTML += "\n" + e + " " + (data || '');
+  }
+
+  var audio_context;
+  var recorder;
+
+  function startUserMedia(stream) {
+    var input = audio_context.createMediaStreamSource(stream);
+    __log('Media stream created.' );
+	__log("input sample rate " +input.context.sampleRate);
+
+    // Feedback!
+    //input.connect(audio_context.destination);
+    __log('Input connected to audio context destination.');
+
+    recorder = new Recorder(input, {
+                  numChannels: 1
+                });
+    __log('Recorder initialised.');
+  }
+
+  function startRecording(button) {
+    recorder && recorder.record();
+   // button.disabled = true;
+   // button.nextElementSibling.disabled = false;
+    __log('Recording...');
+  }
+
+  function stopRecording(button) {
+    recorder && recorder.stop();
+   // button.disabled = true;
+   // button.previousElementSibling.disabled = false;
+   // __log('Stopped recording.');
+
+    // create WAV download link using audio data blob
+    createDownloadLink();
+
+    recorder.clear();
+  }
+
+  function createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+      
+    });
+  }
+
+  window.onload = function init() {
+    try {
+      // webkit shim
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+      window.URL = window.URL || window.webkitURL;
+
+      audio_context = new AudioContext;
+      __log('Audio context set up.');
+      __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+    } catch (e) {
+      alert('No web audio support in this browser!');
+    }
+
+    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+      __log('No live audio input: ' + e);
+    });
+  };
+        
+        
+        function audioStart(){
+           // alert("start");
+            document.getElementById("play").style.display = "none";
+            document.getElementById("stop").style.display = "inline-block";
+            startRecording();
+        }
+         function audioStop(){
+             //alert("stope");
+            document.getElementById("play").style.display = "inline-block";
+            document.getElementById("stop").style.display = "none";
+            stopRecording();
+           
+        }
+    </script>
+</head>
+	<body>
+		
+		
+                <div class="container-fluid ">                 
+                     <!--    HEADER  BAR-->
+                     <div class="row" style="border: 1px solid #e7e7e7;; margin-top:5px;height: 74px;">
+                         <div class="col-sm-2 main-border"    >
+                             <div class="apiImg"></div>
+                        </div>                                   
+                         <div class="col-sm-7 main-border" style="background: white;" >
+                             <div class="row" style="margin-top: 20px;">
+                                 <div class="col-sm-1"></div>
+                                 <div class="col-sm-8" style="margin-top: -4px;">
+                                     <i class="i-priority-color-mark priority-500000"></i> <input type="text" id="entityName" name=""  class="saveInputBox" placeholder="Intent name"></input>
+                                 </div>
+                                 <div class="col-sm-2">
+                                     <button  id="intentCreate" type="button" class="md-button" style="margin-top: -4px;" >Save</button>
+                                 </div>
+                                 <div  style="margin-top: 4px;" class="col-sm-1 glyphicon glyphicon-option-vertical">
+                                    
+                                 </div>
+                             </div>
+                             
+                         </div>                   
+                         <div class="col-sm-3 main-border" style="padding-top: 26px;" >
+                             <div class="row"> <div class="col-sm-9">Try it now</div><div class="col-sm-3 glyphicon glyphicon-grain"></div></div>
+                             
+                                                                                                 
+                       </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="row" style="height:600px; " >
+                       
+                         <!--    MENU  BAR-->
+                        <div class="col-sm-2" style="height: 600px;border-right: 1px solid #e7e7e7;background: #f8f8f8;">
+                            <div class="row" style="border:1px solid #e7e7e7; height:45px;" ><div class="col-sm-8" style="text-align: center;padding-top: 9px;" >NewAgent-1</div> 
+                                <div class="col-sm-1" ><span class="caret"></span></div><div class="col-sm-1 glyphicon glyphicon-cog" style="margin-top: 12px;"  ></div></div>
+                            <div class="row" style="background-color: #36a0e1;height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-modal-window" ></div>
+                                <div class="col-sm-6  ">Intents</div>
+                                  <div class="col-sm-4 glyphicon glyphicon-plus"></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                <a href="./html/integrations.html"> <div class="col-sm-1 glyphicon glyphicon-oil" ></div>
+                                <div class="col-sm-8">Integrations</div>
+                                <div class="col-sm-3" ></div>
+                                </a>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                <a href="./html/scheduler.html"> <div class="col-sm-1 glyphicon glyphicon-education" ></div>
+                                <div class="col-sm-8">Scheduler</div>
+                                  <div class="col-sm-3" ></div></a>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-piggy-bank" ></div>
+                                <div class="col-sm-8">Analytic</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-sound-dolby" ></div>
+                                <div class="col-sm-8">Fulfillment</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-sound-7-1" ></div>
+                                <div class="col-sm-8">Prebuilt Agent</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                            <div class="row" style="height: 45px; padding-top: 10px;">
+                                 <div class="col-sm-1 glyphicon glyphicon-cd" ></div>
+                                <div class="col-sm-8">Small Talk</div>
+                                  <div class="col-sm-3" ></div>
+                            </div>
+                        </div>
+                   
+                      <!-- BODY CONTENT-->
+                         <div class="col-sm-7" style="border-right:1px solid #f4f5f5;">
+                             <div class="row" > <div class="col-sm-1"  ></div> <div class="col-sm-11 fieldLabel" visibility="hidden" >User says</div> </div>
+                             <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11 " ><input visibility="hidden" class="inputBox" id="userSaysId" placeholder="Add user expression" type="text"/></div></div>
+                             
+                             <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11 fieldLabel" visibility="hidden" >Event</div></div>
+                             <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11" ><input visibility="hidden" class="inputBox" id="eventId" placeholder="Enter event name" type="text"/></div></div>
+                              <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11 fieldLabel" >Action</div></div>
+                             <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11" ><input  class="inputBox" id="actionId" placeholder="Enter action name" type="text"/></div></div>
+                             <div class="row parameterLabel" style="margin-top: 26px;width: 95%; margin-left: 5px;" >
+                                 
+                                 <div class="col-sm-1 " ></div>
+                                <div class="col-sm-1 addAction"  >Require</div>
+                                <div class="col-sm-3 addAction"  >Parameter name</div>
+                                <div class="col-sm-3 addAction" >Entity</div>
+                                <div class="col-sm-3 addAction" >Value</div>
+                                <div class="col-sm-1 addAction" >Islist</div>                               
+                             </div>
+                              <table id="intentParametersTable" style="margin-top: 16px;width: 95%; margin-left: 17px;" >
+                             <tr class="row"  >
+                                
+                                 <td class="col-sm-1"  ></td>
+                                <td class="col-sm-1"  ><input type="checkbox" name="is-required" id="isRequired1"/></td>
+                                <td class="col-sm-3 "  ><input placeholder="Enter name" type="text" name="actionParameter"/></td>
+                                <td class="col-sm-3 " ><input placeholder="Enter entity" type="text" name="actionName"/></td>
+                                <td class="col-sm-3 " ><input placeholder="Enter value" type="text" name="actionValue"/></td>
+                                <td class="col-sm-1 " ><input placeholder="Enter entity" type="checkbox" name="is-list" id="isList1"/></td> 
+                               
+                             </tr>
+                                   </table>
+                             <div id="intentAddParam" class="row" style="margin-top:20px;" >
+                                  <div class="col-sm-1"  ></div>
+                                   <div class="col-sm-10 glyphicon glyphicon-plus"  >New parameter</div>
+                             </div>
+                             <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11 fieldLabel" style="margin-top:20px;" >Text Response</div></div> 
+                             <div class="row" ><div class="col-sm-1" ></div> <div class="col-sm-11" ><input id="textMessage" class="inputBox" placeholder="" type="text"/></div></div>
+                             
+<!--                             <div class="row" ><div class="col-sm-1" style="margin-top:20px;"></div> <div class="col-sm-11 fieldLabel" >Training</div></div> -->
+                             <div class="row" style="margin-top:30px;"><div class="col-sm-1" > </div><div class="col-sm-2 fieldLabel" >Training</div> <div class="col-sm-6" ><form   id="trainingContent"  name="trainingContent"  method="post" enctype="multipart/form-data"><input name="trainingContent" type="file"/></form></div><div class="col-sm-2" >  <button  id="tranningContentSave" type="button" class="md-button" style="" >Start training</button></div></div>
+                             
+                         </div>                   
+                        <!--   RIGHT SIDE  BAR-->
+                        <div id="chatBarId" class="col-sm-3 "  >
+                            <div class="row"> <div  class="col-sm-5" > </div><div  class="col-sm-3 glyphicon glyphicon-user" style="padding-top: 45px;" > </div></div>
+<!--                                <input type="button" name="toggle"   />				-->
+                               <div id="chat_div"></div>                                                                      
+                       </div>
+                    </div>
+                </div>               
+	</body>
+</html>
