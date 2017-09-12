@@ -79,7 +79,7 @@ public class RESTMicroService {
                     }
                 }
             }
-            System.out.println("herer");
+            System.out.println("here");
             msg = msg + e;
             log.info("new msg >>> " + msg);
         }

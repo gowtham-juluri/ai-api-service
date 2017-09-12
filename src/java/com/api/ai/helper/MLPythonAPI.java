@@ -72,10 +72,10 @@ public class MLPythonAPI {
             System.out.println(s);
 
             while ((s = stdInput.readLine()) != null) {
-                System.out.println("inside while");
+                System.out.println("MLPythonAPI >>> (inside while)");
                 System.out.println(s);
             }
-            log.info("Done now!(file path created for this request) " + filePath);
+            System.out.println("Done now!(file path created for this request) " + filePath);
            
         } catch (IOException ex) {
             Logger.getLogger(MLPythonAPI.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,6 +90,7 @@ public class MLPythonAPI {
      */
     public static void callPyhonScriptToTrain() {
 
+        System.out.println("callPyhonScriptToTrain START ");
         try {
             log.info("callPyhonScriptToTrain started now!");
             
@@ -97,6 +98,7 @@ public class MLPythonAPI {
                     command("python", "C:\\artificial-intelligence-poc\\script\\RASA-NLU\\AI_rasa\\train_agent.py");
             Process p = pb.start();
             p.waitFor();
+            System.out.println("callPyhonScriptToTrain END. Completed");
         } catch (IOException ex) {
             Logger.getLogger(MLPythonAPI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {

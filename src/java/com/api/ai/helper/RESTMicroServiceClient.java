@@ -21,7 +21,7 @@ public class RESTMicroServiceClient {
 
         try {
             IntentVO i = new IntentVO();
-            i.setIntent("Travel");
+            i.setIntent("Weather");
             ArrayList<ParameterVO> pl = new ArrayList<ParameterVO>();
             
             ParameterVO p = new ParameterVO();            
@@ -48,11 +48,11 @@ public class RESTMicroServiceClient {
      */
     public static String executeRestServcie(IntentVO ivo) throws UnsupportedEncodingException {
 
-        String u = "http://localhost:8080/api-ai-service/webresources/rest-micro/action";
+        String u = "http://localhost:8080/intent-ai-service/webresources/rest-micro/action";
         
         if(ivo.getIntent() != null && ivo.getIntent().length() >0)
         {
-            u = "http://localhost:8080/api-ai-service/webresources/rest-micro/action?intent="+ivo.getIntent();
+            u = "http://localhost:8080/intent-ai-service/webresources/rest-micro/action?intent="+ivo.getIntent();
             
             ArrayList<ParameterVO> pl = (ArrayList)ivo.getParams();
             System.out.println("pl >>>>>>>>>>>>>>> " + pl);

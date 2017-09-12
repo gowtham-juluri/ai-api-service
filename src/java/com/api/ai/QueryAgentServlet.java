@@ -18,6 +18,8 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,18 @@ public class QueryAgentServlet extends HttpServlet {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(QueryAgentServlet.class);
 
+    
+    public static void main(String[] args)
+    {
+        try {
+            QueryAgentServlet q = new QueryAgentServlet();
+            q.testMethod("how is the climate in bangalore");
+        } catch (ServletException ex) {
+            Logger.getLogger(QueryAgentServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(QueryAgentServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -63,6 +77,89 @@ public class QueryAgentServlet extends HttpServlet {
         String userQuestion = (String) request.getParameter("name");
         if (userQuestion != null && userQuestion.length() > 0) {
             
+            System.out.println("userQuestion >>> " + userQuestion);
+
+            String dataFileMLSent = MLPythonAPI.callPyhonScriptToPredict(userQuestion);
+            System.out.println("dataFileMLSent >>> " + dataFileMLSent);
+            if (dataFileMLSent != null && dataFileMLSent.length() > 0) {
+
+                File file = new File(dataFileMLSent);
+                if (!file.exists() || !file.isFile()) {
+                    System.out.println("File doesn\'t exist. Default message would be sent back to user.");
+
+                } else {
+                    //File exists
+                    if (file.length() > 0) {
+                        
+                        String contents = new String(Files.readAllBytes(Paths.get(dataFileMLSent)));
+                        //File exists and file length>0
+                        BufferedReader b = new BufferedReader(new FileReader(file));
+
+                        String readLine = "";
+
+                        System.out.println("Reading file using Buffered Reader >>>>>>> contents >>>>>>> " + contents);
+                        ArrayList<ParameterVO> pval = new ArrayList<ParameterVO>();
+                        String intentPredicted="";
+                        while ((readLine = b.readLine()) != null) {
+
+                            System.out.println(readLine);
+                            
+                            if(readLine != null && readLine.indexOf("INTENT")>=0)
+                            {
+                                intentPredicted = getIntentName(readLine);
+                            }
+                            else
+                            {
+                                String entN = readLine.substring(0,readLine.indexOf("="));
+                                String entV = readLine.substring(readLine.indexOf("=")+1);
+                                System.out.println("QSA Entity Name >>>> " + entN);
+                                System.out.println("QSA Entity Value >>>> " + entV);
+                                ParameterVO pvo = new ParameterVO();
+                                pvo.setEntityName(entN);
+                                pvo.setEntityValue(entV);
+                                pval.add(pvo);
+                                
+                            }
+                        }
+                        System.out.println("QSA intentPredicted >>>>>> " + intentPredicted);
+                        System.out.println("QSA pval >>>>>> " + pval);
+                        if (intentPredicted != null && intentPredicted.length() > 0) {
+//                                MySQLDBServiceHelper h = new MySQLDBServiceHelper();
+//                                IntentVO iData = h.getIntentData(intentPredicted);
+                            IntentVO iData = new IntentVO();
+                            iData.setIntent(intentPredicted);
+                            iData.setParams(pval);
+                            System.out.println("input params >>> " + iData.getParams());
+                            String res = RESTMicroServiceClient.executeRestServcie(iData);
+                            System.out.println("res >>> " + res);
+                            if(res != null)
+                            {
+                                msg = "{\"response\": \"" + res + "\"}";
+                            }
+                        } else {
+                            //intent data format is not as per the expcted format in the file
+                        }
+                    } else {
+                        //sending default msg
+                    }
+                }
+            } else {
+//                sending default msg
+            }
+        }
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print(msg);
+        out.flush();
+    }
+
+    protected void testMethod(String userQuestion)
+            throws ServletException, IOException {
+
+        String msg = "{\"response\": \"Dear User, we are sorry to say that we are unable to understand your question.\"}";
+        System.out.println("Executing testMethod method....");
+        if (userQuestion != null && userQuestion.length() > 0) {
+            
             System.out.println(userQuestion);
 
             String dataFileMLSent = MLPythonAPI.callPyhonScriptToPredict(userQuestion);
@@ -85,10 +182,11 @@ public class QueryAgentServlet extends HttpServlet {
 
                         System.out.println("Reading file using Buffered Reader >>>>>>> contents >>>>>>> " + contents);
                         ArrayList<ParameterVO> pval = new ArrayList<ParameterVO>();
+                        String intentPredicted="";
                         while ((readLine = b.readLine()) != null) {
 
                             System.out.println(readLine);
-                            String intentPredicted="";
+                            
                             if(readLine != null && readLine.indexOf("INTENT")>=0)
                             {
                                 intentPredicted = getIntentName(readLine);
@@ -97,30 +195,31 @@ public class QueryAgentServlet extends HttpServlet {
                             {
                                 String entN = readLine.substring(0,readLine.indexOf("="));
                                 String entV = readLine.substring(readLine.indexOf("=")+1);
-                                System.out.println("Entity Name >>>> " + entN);
-                                System.out.println("Entity Value >>>> " + entV);
+                                System.out.println("QSA Entity Name >>>> " + entN);
+                                System.out.println("QSA Entity Value >>>> " + entV);
                                 ParameterVO pvo = new ParameterVO();
                                 pvo.setEntityName(entN);
                                 pvo.setEntityValue(entV);
                                 pval.add(pvo);
-                                
                             }
-//                            String intentPredicted = readLine;
-                            System.out.println(">>>>>> " + intentPredicted);
-                            if (intentPredicted != null && intentPredicted.length() > 0) {
-                                MySQLDBServiceHelper h = new MySQLDBServiceHelper();
-                                IntentVO iData = h.getIntentData(intentPredicted);
-                                iData.setParams(pval);
-                                System.out.println("input params >>> " + iData.getParams());
-                                String res = RESTMicroServiceClient.executeRestServcie(iData);
-                                System.out.println("res >>> " + res);
-                                if(res != null)
-                                {
-                                    msg = "{\"response\": \"" + res + "\"}";
-                                }
-                            } else {
-                                //intent data format is not as per the expcted format in the file
+                        }
+                        System.out.println("QSA intentPredicted >>>>>> " + intentPredicted);
+                        System.out.println("QSA pval >>>>>> " + pval);
+                        if (intentPredicted != null && intentPredicted.length() > 0) {
+//                                MySQLDBServiceHelper h = new MySQLDBServiceHelper();
+//                                IntentVO iData = h.getIntentData(intentPredicted);
+                            IntentVO iData = new IntentVO();
+                            iData.setIntent(intentPredicted);
+                            iData.setParams(pval);
+                            System.out.println("input params >>> " + iData.getParams());
+                            String res = RESTMicroServiceClient.executeRestServcie(iData);
+                            System.out.println("res >>> " + res);
+                            if(res != null)
+                            {
+                                msg = "{\"response\": \"" + res + "\"}";
                             }
+                        } else {
+                            //intent data format is not as per the expcted format in the file
                         }
                     } else {
                         //sending default msg
@@ -130,13 +229,8 @@ public class QueryAgentServlet extends HttpServlet {
 //                sending default msg
             }
         }
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        out.print(msg);
-        out.flush();
-
     }
-
+    
     /**
      *
      * @param machineLResponse

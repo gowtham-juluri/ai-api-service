@@ -48,6 +48,8 @@ public class MySQLDBServiceHelper {
                 + "PARAM_NAME,ENTITY_NAME,ENTITY_VALUE IS_LIST "
                 + "FROM INTENT_DATA INTENT, INTENT_ASS_ACTION_PARAMS PARAM "
                 + "WHERE INTENT.INTENT_ID=PARAM.INTENT_ID AND INTENT.INTENT_NAME='" + intentName + "'";
+        
+        System.out.println("Query to fetch intent data >>>> " + query);
         Connection connection = getDBConnection();
         Statement stmt = null;
         IntentVO responseVO = new IntentVO();
@@ -64,7 +66,7 @@ public class MySQLDBServiceHelper {
                 a.add(pvo);
                 responseVO.setIntent(rs.getString("INTENT_NAME"));
                 responseVO.setAction(rs.getString("INTENT_ACTION"));
-                responseVO.setIntent(rs.getString("RESPONSE_MESSAGE"));
+                responseVO.setResponseMessage(rs.getString("RESPONSE_MESSAGE"));
                 pvo.setIsRequired(rs.getString("REQUIRED"));
                 pvo.setParamName(rs.getString("PARAM_NAME"));
                 pvo.setEntityName(rs.getString("ENTITY_NAME"));
