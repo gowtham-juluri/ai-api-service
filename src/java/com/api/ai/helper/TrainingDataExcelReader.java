@@ -102,7 +102,7 @@ public class TrainingDataExcelReader {
 //                    }
                 }
                 System.out.println("ARRAY LIST GENERATED >>>");
-                 System.out.println("al);
+                 System.out.println(al);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
