@@ -9,7 +9,7 @@
    var dynamicId=1;
   $('#intentCreate').click(function(event) {
      var name=$('#entityName').val();
-     var userSays=$('#userSaysId').val();
+     //var userSays=$('#userSaysId').val();
      var textMessage=$('#textMessage').val();
      var actionValue=$('#actionId').val();
      var tableList=[];
@@ -47,17 +47,39 @@
     //var formdata=new FormData($('form')[0]);
     var jsonData = {
         "intent": name, 
-        "userSays": userSays,
+       // "userSays": userSays,
         "textMessage": textMessage,
         "action": actionValue,
         "params": tableList
         }
-    jsonObj.push(jsonData);          
-      $.post("/intent-ai-service/store-db",
-                        {name: JSON.stringify(jsonData)
-                        },
-                        function(data, status){       
-                        });
+        jsonObj.push(jsonData);
+        var formdata=new FormData($('form')[0]);
+         $.ajax({
+            url: "/intent-ai-service/store-train-data",
+            type: "POST",
+            data: formdata,
+            mimeTypes:"multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(){ 
+                    $.post("/intent-ai-service/store-db",
+                           {name: JSON.stringify(jsonData)
+                           },
+                           function(data, status){       
+                           });
+                        
+             },error: function(){
+                    //alert("okey");
+                     $.post("/intent-ai-service/store-db",
+                           {name: JSON.stringify(jsonData)
+                           },
+                           function(data, status){       
+                           });
+               }
+         });
+              
+     
    });
    
       $("#tranningContentSave").click(function(){

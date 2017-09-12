@@ -125,19 +125,5 @@ public class StoreTrainDataServlet extends HttpServlet {
                 throw new ServletException("Cannot parse multipart request.", e);
             }
         }
-        TrainingDataExcelReader excelParse = new TrainingDataExcelReader();
-        MySQLDBServiceHelper dbSave = new MySQLDBServiceHelper();
-        if (hasTD) {
-            System.out.println("hasTD is true...!");
-            ArrayList<TrainingDataVO> al = excelParse.getTrainingDataAsList(FILE_PATH);
-            dbSave.saveTrainingData(al);
-            System.out.println("calling script >>>>>>>>>>>>>>>>>>>>>>>");
-            MLPythonAPI.callPyhonScriptToTrain();
-
-        }
-        else
-        {
-            return;
-        }
     }
 }

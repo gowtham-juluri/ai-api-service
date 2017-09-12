@@ -34,7 +34,7 @@ public class MySQLDBServiceHelper {
         Gson gson = new Gson();
         IntentVO iv = gson.fromJson(json, IntentVO.class);
         System.out.println("iv " + iv);
-        h.saveIntentData(iv);
+//        h.saveIntentData(iv);
 //         Connection connection = h.getDBConnection();
     }
 
@@ -93,8 +93,9 @@ public class MySQLDBServiceHelper {
     /**
      *
      * @param ivo
+     * @param usersaysList 
      */
-    public void saveIntentData(IntentVO ivo) {
+    public void saveIntentData(IntentVO ivo, ArrayList<String> usersaysList) {
         
         Connection connection = getDBConnection();
         Statement stmt = null;
@@ -102,9 +103,8 @@ public class MySQLDBServiceHelper {
             connection.setAutoCommit(true);
             stmt = connection.createStatement();
 
-            String i = "INSERT INTO INTENT_DATA(INTENT_NAME,USER_SAYS,INTENT_ACTION,RESPONSE_MESSAGE, INTENT_CREATE_DATE) VALUES("
+            String i = "INSERT INTO INTENT_DATA(INTENT_NAME,INTENT_ACTION,RESPONSE_MESSAGE, INTENT_CREATE_DATE) VALUES("
                     + "'" + ivo.getIntent() + "',"
-                    + "'" + ivo.getUserSays() + "',"
                     + "'" + ivo.getAction() + "',"
                     + "'" + ivo.getResponseMessage() + "',"
                     + "CURRENT_TIMESTAMP)";
@@ -116,10 +116,13 @@ public class MySQLDBServiceHelper {
             if (rs.next()) {
 
                 intentID = rs.getInt(1);
-                System.out.println("intentID generated >>> " + intentID.intValue());
-                String j = "INSERT INTO INTENT_ASS_ACTION_PARAMS(INTENT_ID,REQUIRED,PARAM_NAME,ENTITY_NAME,ENTITY_VALUE,ISLIST,PARAM_CREATE_DATE) VALUES(";
+                System.out.println("intentID generated >>> " + intentID);
+                
+                String j = "INSERT INTO INTENT_ASS_ACTION_PARAMS(INTENT_ID,REQUIRED,PARAM_NAME,ENTITY_NAME,ENTITY_VALUE,ISLIST,PARAM_CREATE_DATE) "
+                        + "VALUES(";
                 String k = "";
                 ArrayList<ParameterVO> apl = (ArrayList) ivo.getParams();
+                
                 for (ParameterVO apl1 : apl) {
                     k = "";
                     k = j + intentID.intValue() + ","
@@ -129,7 +132,19 @@ public class MySQLDBServiceHelper {
                             + "'" + apl1.getEntityValue() + "',"
                             + "'" + apl1.getIsList() + "',"
                             + "CURRENT_TIMESTAMP)";
-                    System.out.println("k >>> " + k);
+                    System.out.println("Inserting Entity Param >>> " + k);
+                    stmt.execute(k);
+                }
+                
+                String m = "INSERT INTO USER_SAYS(INTENT_ID,USER_SAYS_TEXT) "
+                        + "VALUES(";
+                
+                for (int l = 0; l < usersaysList.size(); l++) {
+                    String u = usersaysList.get(l);
+                    k = "";
+                    k = m + intentID.intValue() + ","
+                            + "'" + u + "')";
+                    System.out.println("Inserting USER_SAYS >>> " + k);
                     stmt.execute(k);
                 }
             }

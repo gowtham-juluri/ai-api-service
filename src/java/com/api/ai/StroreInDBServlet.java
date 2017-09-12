@@ -7,9 +7,10 @@ package com.api.ai;
 
 import com.api.ai.helper.MySQLDBServiceHelper;
 import com.api.ai.dto.IntentVO;
-import com.api.ai.helper.MLPythonAPI;
+import com.api.ai.helper.TrainingDataExcelReader;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class StroreInDBServlet extends HttpServlet {
 
     static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(StroreInDBServlet.class);
+    private static String FILE_PATH = "C:\\artificial-intelligence-poc\\TrainingData.xlsx";
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -59,9 +61,14 @@ public class StroreInDBServlet extends HttpServlet {
             Gson gson = new Gson();
             IntentVO iv = gson.fromJson(jsonIntentDetaiils, IntentVO.class);
             System.out.println("iv " + iv);
-            dbSave.saveIntentData(iv);
-            //Do we need to call this script again?
+            
+            TrainingDataExcelReader excelParse = new TrainingDataExcelReader();
+            System.out.println("hasTD is true...!");
+            ArrayList<String> al = excelParse.getTrainingDataAsList(FILE_PATH);
+            dbSave.saveIntentData(iv, al);
+            System.out.println("calling script >>>>>>>>>>>>>>>>>>>>>>>");
 //            MLPythonAPI.callPyhonScriptToTrain();
+//            dbSave.saveIntentData(iv);
         } else {
             System.out.println("intent data received is NULL " + jsonIntentDetaiils);
         }
