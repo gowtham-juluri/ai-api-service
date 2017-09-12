@@ -7,6 +7,7 @@ package com.api.ai;
 
 import com.api.ai.helper.MySQLDBServiceHelper;
 import com.api.ai.dto.IntentVO;
+import com.api.ai.helper.MLPythonAPI;
 import com.api.ai.helper.TrainingDataExcelReader;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -66,8 +67,8 @@ public class StroreInDBServlet extends HttpServlet {
             System.out.println("hasTD is true...!");
             ArrayList<String> al = excelParse.getTrainingDataAsList(FILE_PATH);
             dbSave.saveIntentData(iv, al);
-            System.out.println("calling script >>>>>>>>>>>>>>>>>>>>>>>");
-//            MLPythonAPI.callPyhonScriptToTrain();
+            System.out.println("calling python script to train >>>>>>>>>>>>>>>>>>>>>>>");
+            MLPythonAPI.callPyhonScriptToTrain();
 //            dbSave.saveIntentData(iv);
         } else {
             System.out.println("intent data received is NULL " + jsonIntentDetaiils);
