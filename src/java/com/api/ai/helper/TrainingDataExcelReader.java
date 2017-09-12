@@ -54,7 +54,7 @@ public class TrainingDataExcelReader {
                     Cell currentCell = cellIterator.next();
                     if (currentCell.getCellTypeEnum() == CellType.STRING) 
                     {
-                        System.out.print(currentCell.getStringCellValue() + "--");
+                        System.out.print(currentCell.getStringCellValue());
                         al.add(currentCell.getStringCellValue());
 //                        tdo.setUserSay(currentCell.getStringCellValue());
                     }
@@ -101,7 +101,8 @@ public class TrainingDataExcelReader {
 //                        }
 //                    }
                 }
-                System.out.println(al);
+                System.out.println("ARRAY LIST GENERATED >>>");
+                 System.out.println("al);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
